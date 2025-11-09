@@ -6,7 +6,6 @@ import PauseIcon from './components/icons/PauseIcon.tsx';
 import { useAudioEngine } from './hooks/useAudioEngine.ts';
 import type { ChimeData, Hit } from './types.ts';
 import { CHIMES_CONFIG } from './constants.ts';
-import { IMAGE_BASE64 } from './media/ImageBase64.ts';
 
 const App: React.FC = () => {
   const [isRaining, setIsRaining] = useState(false);
@@ -69,7 +68,15 @@ const App: React.FC = () => {
           role="application"
           aria-label="Interactive Rain Chime Image"
         >
-          <img src={IMAGE_BASE64} alt="Magical rain chimes in a forest" className="absolute inset-0 w-full h-full object-cover" />
+          <video
+            src="https://img.noahcohn.com/video/rainpiano.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+            data-testid="background-video"
+          />
           
           {!isAudioReady && (
             <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center backdrop-blur-sm transition-opacity duration-300">
