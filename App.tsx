@@ -1,12 +1,11 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
-import RainChime from './components/RainChime.tsx';
-import PlayIcon from './components/icons/PlayIcon.tsx';
-import PauseIcon from './components/icons/PauseIcon.tsx';
-import { useAudioEngine } from './hooks/useAudioEngine.ts';
-import type { ChimeData, Hit } from './types.ts';
-import { CHIMES_CONFIG } from './constants.ts';
-import { IMAGE_BASE64 } from './media/ImageBase64.ts';
+import RainChime from './components/RainChime';
+import PlayIcon from './components/icons/PlayIcon';
+import PauseIcon from './components/icons/PauseIcon';
+import { useAudioEngine } from './hooks/useAudioEngine';
+import type { ChimeData } from './types';
+import { CHIMES_CONFIG } from './constants';
+// import { IMAGE_BASE64 } from './media/ImageBase64'; // Removed this import
 
 const App: React.FC = () => {
   const [isRaining, setIsRaining] = useState(false);
@@ -64,12 +63,19 @@ const App: React.FC = () => {
         </header>
 
         <div
-          className="relative w-full max-w-4xl aspect-square rounded-lg shadow-2xl shadow-black/50 overflow-hidden group cursor-pointer"
+          className="relative w-full max-w-4xl aspect-video rounded-lg shadow-2xl shadow-black/50 overflow-hidden group cursor-pointer" // Changed aspect-square to aspect-video
           onClick={handleManualClick}
           role="application"
-          aria-label="Interactive Rain Chime Image"
+          aria-label="Interactive Rain Chime Video"
         >
-          <img src={IMAGE_BASE64} alt="Magical rain chimes in a forest" className="absolute inset-0 w-full h-full object-cover" />
+          {/* Replaced img with video */}
+          <video
+            src="https://r3-3.hlsnow.com/hls/9f6z3r1p7e6x33m7_,240,360,480,720,1080,p.mp4.urlset/master.m3u8"
+            autoPlay
+            muted
+            loop
+            className="absolute top-0 left-0 w-full h-full object-cover"
+          />
           
           {!isAudioReady && (
             <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center backdrop-blur-sm transition-opacity duration-300">
@@ -98,8 +104,6 @@ const App: React.FC = () => {
           ))}
         </div>
 
-        <RainChime isRaining={isRaining} rainDensity={rainDensity} onChimeStrike={handleChimeStrike} />
-
         <div className="mt-8 md:mt-12 flex flex-col items-center gap-8 w-full max-w-xs">
           <button
             onClick={() => setIsRaining(!isRaining)}
@@ -124,7 +128,7 @@ const App: React.FC = () => {
               max="10"
               value={rainDensity}
               onChange={(e) => setRainDensity(Number(e.target.value))}
-              className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-400 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-spike"
               disabled={!isRaining || !isAudioReady}
               aria-label="Rain density"
             />
