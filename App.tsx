@@ -5,11 +5,12 @@ import PauseIcon from './components/icons/PauseIcon';
 import { useAudioEngine } from './hooks/useAudioEngine';
 import type { ChimeData } from './types';
 import { CHIMES_CONFIG } from './constants';
-// import { IMAGE_BASE64 } from './media/ImageBase64'; // Removed this import
+// No longer need this, as we're using an external video URL
+// import { IMAGE_BASE64 } from './media/ImageBase64'; 
 
 const App: React.FC = () => {
   const [isRaining, setIsRaining] = useState(false);
-  const [rainDensity, setRainDensity] = useState(3);
+  const [rainDensity, setRainDensity] = = 3;
   const [hits, setHits] = useState<Hit[]>([]);
   const { isAudioReady, initializeAudio, playNote } = useAudioEngine();
 
@@ -51,31 +52,39 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-slate-900 text-white font-sans overflow-hidden">
-      <main className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4">
+    // We add a class here to handle the video background styling
+    <div className="relative min-h-screen w-full bg-slate-900 text-white font-sans overflow-hidden video-container">
+      
+      {/* Video Background */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline // Important for iOS video playback
+        className="absolute top-0 left-0 w-full h-full object-cover -z-10"
+      >
+        <source src="https://stream.media.thinknpm.com/p/static/fastly/production/a9775.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      
+      {/* Content Overlay */}
+      <main className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4 bg-black bg-opacity-30"> {/* Added a slight dark overlay for text readability */}
         <header className="text-center mb-4 md:mb-8">
-          <h1 className="text-4xl md:text-6xl font-thin tracking-wider text-cyan-200/80">
+          <h1 className="text-4xl md:text-6xl font-thin tracking-wider text-white" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
             Rain Chime
           </h1>
-          <p className="text-slate-400 mt-2 max-w-md">
-            Click the chimes to play, or start the rain for a generative melody.
+          <p className="text-gray-200 mt-2 max-w-md" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>
+            Click anywhere to play, or start the rain for a generative melody.
           </p>
         </header>
 
         <div
-          className="relative w-full max-w-4xl aspect-video rounded-lg shadow-2xl shadow-black/50 overflow-hidden group cursor-pointer" // Changed aspect-square to aspect-video
+          className="relative w-full max-w-4xl aspect-video overflow-hidden group cursor-pointer" // No border/shadow, as it's full-screen
           onClick={handleManualClick}
           role="application"
           aria-label="Interactive Rain Chime Video"
         >
-          {/* Replaced img with video */}
-          <video
-            src="https://r3-3.hlsnow.com/hls/9f6z3r1p7e6x33m7_,240,360,480,720,1080,p.mp4.urlset/master.m3u8"
-            autoPlay
-            muted
-            loop
-            className="absolute top-0 left-0 w-full h-full object-cover"
-          />
+          {/* This container is now primarily for click/tap detection and animations */}
           
           {!isAudioReady && (
             <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center backdrop-blur-sm transition-opacity duration-300">
@@ -118,7 +127,7 @@ const App: React.FC = () => {
           </button>
 
           <div className="w-full flex flex-col items-center">
-            <label htmlFor="density-slider" className="text-slate-400 mb-2 text-sm tracking-wide">
+            <label htmlFor="density-slider" className="text-slate-200 mb-2 text-sm tracking-wide">
               Rain Density
             </label>
             <input
@@ -128,11 +137,10 @@ const App: React.FC = () => {
               max="10"
               value={rainDensity}
               onChange={(e) => setRainDensity(Number(e.target.value))}
-              className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-spike"
-              disabled={!isRaining || !isAudioReady}
+              className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-400 disabled:opacity-50 disabled:cursor-not-allowed"
               aria-label="Rain density"
             />
-            <div className="w-full flex justify-between text-xs text-slate-500 mt-1 px-1">
+            <div className="w-full flex justify-between text-xs text-slate-400 mt-1 px-1">
               <span>Slower</span>
               <span>Faster</span>
             </div>
