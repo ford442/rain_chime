@@ -63,7 +63,11 @@ const App: React.FC = () => {
         </header>
 
         <div
-          className="relative w-full max-w-4xl aspect-square rounded-lg shadow-2xl shadow-black/50 overflow-hidden group cursor-pointer"
+          className="relative w-full max-w-4xl aspect-square group cursor-pointer"
+          style={{
+            maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 70%)',
+            WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 70%)',
+          }}
           onClick={handleManualClick}
           role="application"
           aria-label="Interactive Rain Chime Image"

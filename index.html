@@ -32,16 +32,17 @@
         border-radius: 9999px;
         pointer-events: none;
         animation: pulse-fade 2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-        width: 6rem;
-        height: 6rem;
+        width: 8rem;
+        height: 8rem;
 
         /* Visual Style */
-        background: radial-gradient(circle, var(--chime-color), transparent 60%);
-        mix-blend-mode: screen; /* Allows light to add up */
-        filter: blur(8px); /* The "through rain/glass" look */
+        background: radial-gradient(circle, var(--chime-color), transparent 50%);
+        mix-blend-mode: screen;
+        filter: blur(12px); /* Increased blur for dreamier look */
+        opacity: 0.9;
 
-        /* Optional: Enhance glow */
-        box-shadow: 0 0 40px var(--chime-color);
+        /* Enhance glow */
+        box-shadow: 0 0 60px var(--chime-color);
       }
 
       /* Inner bright core for lens flare feel */
@@ -51,12 +52,13 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 30%;
-        height: 30%;
+        width: 20%;
+        height: 20%;
         background: white;
         border-radius: 50%;
-        filter: blur(4px);
-        opacity: 0.8;
+        filter: blur(6px);
+        opacity: 0.6;
+        mix-blend-mode: overlay;
       }
     </style>
   </head>
