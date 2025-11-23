@@ -63,7 +63,7 @@ const App: React.FC = () => {
         </header>
 
         <div
-          className="relative w-full max-w-4xl aspect-square group cursor-pointer"
+          className="relative w-full max-w-5xl aspect-video group cursor-pointer"
           style={{
             maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 70%)',
             WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 70%)',
@@ -78,7 +78,7 @@ const App: React.FC = () => {
             loop
             muted
             playsInline
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover object-center"
             data-testid="background-video"
           />
           
