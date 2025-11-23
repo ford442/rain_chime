@@ -98,9 +98,8 @@ const App: React.FC = () => {
               style={{
                 top: `${chime.y}%`,
                 left: `${chime.x}%`,
-                background: `radial-gradient(circle, ${chime.color}33, transparent 70%)`,
-                boxShadow: `0 0 20px ${chime.color}`,
-              }}
+                '--chime-color': chime.color,
+              } as React.CSSProperties}
             />
           ))}
         </div>
