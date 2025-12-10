@@ -21,8 +21,8 @@ const App: React.FC = () => {
     // Add position randomization for rain strikes
     const hitChime = randomizePosition ? {
       ...chime,
-      x: chime.x + (Math.random() - 0.5) * 10, // +/- 5% variation
-      y: chime.y + (Math.random() - 0.5) * 10, // +/- 5% variation
+      x: chime.x + (Math.random() - 0.5) * 10, // +/- 5 percentage points variation
+      y: chime.y + (Math.random() - 0.5) * 10, // +/- 5 percentage points variation
     } : chime;
     
     const newHit: Hit = { key: Date.now() + Math.random(), chime: hitChime };
