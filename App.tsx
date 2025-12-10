@@ -13,16 +13,24 @@ const App: React.FC = () => {
   const [hits, setHits] = useState<Hit[]>([]);
   const { isAudioReady, initializeAudio, playNote } = useAudioEngine();
 
-  const handleChimeStrike = useCallback((chime: ChimeData) => {
+  const handleChimeStrike = useCallback((chime: ChimeData, randomizePosition: boolean = false) => {
     if (!isAudioReady) return;
     
     playNote(chime.frequency);
-    const newHit: Hit = { key: Date.now() + Math.random(), chime };
+    
+    // Add position randomization for rain strikes
+    const hitChime = randomizePosition ? {
+      ...chime,
+      x: chime.x + (Math.random() - 0.5) * 10, // +/- 5% variation
+      y: chime.y + (Math.random() - 0.5) * 10, // +/- 5% variation
+    } : chime;
+    
+    const newHit: Hit = { key: Date.now() + Math.random(), chime: hitChime };
     setHits(currentHits => [...currentHits, newHit]);
     
     setTimeout(() => {
       setHits(currentHits => currentHits.filter(h => h.key !== newHit.key));
-    }, 600); // Animation duration
+    }, 2000); // Extended animation duration for blur effect
   }, [isAudioReady, playNote]);
 
   const handleManualClick = (e: React.MouseEvent<HTMLDivElement>) => {
