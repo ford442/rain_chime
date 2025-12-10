@@ -63,7 +63,11 @@ const App: React.FC = () => {
         </header>
 
         <div
-          className="relative w-full max-w-4xl aspect-square rounded-lg shadow-2xl shadow-black/50 overflow-hidden group cursor-pointer"
+          className="relative w-full max-w-5xl aspect-video group cursor-pointer"
+          style={{
+            maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 70%)',
+            WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 70%)',
+          }}
           onClick={handleManualClick}
           role="application"
           aria-label="Interactive Rain Chime Image"
@@ -74,7 +78,7 @@ const App: React.FC = () => {
             loop
             muted
             playsInline
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover object-center"
             data-testid="background-video"
           />
           
@@ -98,9 +102,8 @@ const App: React.FC = () => {
               style={{
                 top: `${chime.y}%`,
                 left: `${chime.x}%`,
-                background: `radial-gradient(circle, ${chime.color}33, transparent 70%)`,
-                boxShadow: `0 0 20px ${chime.color}`,
-              }}
+                '--chime-color': chime.color,
+              } as React.CSSProperties}
             />
           ))}
         </div>
