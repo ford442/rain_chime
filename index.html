@@ -22,8 +22,20 @@
           transform: translate(-50%, -50%) scale(1.1);
         }
         100% {
-          transform: translate(-50%, -50%) scale(2);
+          transform: translate(-50%, -50%) scale(2.5);
           opacity: 0;
+        }
+      }
+
+      @keyframes rainbow-shift {
+        0% {
+          filter: blur(16px) hue-rotate(0deg);
+        }
+        50% {
+          filter: blur(20px) hue-rotate(180deg);
+        }
+        100% {
+          filter: blur(16px) hue-rotate(360deg);
         }
       }
 
@@ -31,34 +43,46 @@
         position: absolute;
         border-radius: 9999px;
         pointer-events: none;
-        animation: pulse-fade 2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-        width: 8rem;
-        height: 8rem;
+        animation: pulse-fade 2s cubic-bezier(0.25, 1, 0.5, 1) forwards,
+                   rainbow-shift 2s ease-in-out forwards;
+        width: 10rem;
+        height: 10rem;
 
-        /* Visual Style */
-        background: radial-gradient(circle, var(--chime-color), transparent 50%);
+        /* Visual Style with rainbow gradient */
+        background: radial-gradient(circle, 
+          var(--chime-color) 0%, 
+          rgba(255, 100, 255, 0.6) 15%,
+          rgba(100, 200, 255, 0.5) 30%,
+          rgba(100, 255, 200, 0.4) 45%,
+          transparent 70%);
         mix-blend-mode: screen;
-        filter: blur(12px); /* Increased blur for dreamier look */
-        opacity: 0.9;
+        opacity: 0.95;
 
-        /* Enhance glow */
-        box-shadow: 0 0 60px var(--chime-color);
+        /* Enhance glow with multi-color shadow */
+        box-shadow: 
+          0 0 40px var(--chime-color),
+          0 0 80px rgba(255, 100, 255, 0.4),
+          0 0 120px rgba(100, 200, 255, 0.3);
       }
 
-      /* Inner bright core for lens flare feel */
+      /* Inner bright core for lens flare feel with color shift */
       .hit-animation::after {
         content: '';
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 20%;
-        height: 20%;
-        background: white;
+        width: 30%;
+        height: 30%;
+        background: radial-gradient(circle, 
+          white 0%, 
+          var(--chime-color) 40%, 
+          transparent 70%);
         border-radius: 50%;
-        filter: blur(6px);
-        opacity: 0.6;
+        filter: blur(8px);
+        opacity: 0.8;
         mix-blend-mode: overlay;
+        animation: rainbow-shift 2s ease-in-out forwards;
       }
     </style>
   </head>
