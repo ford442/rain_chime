@@ -1,4 +1,14 @@
 // src/constants.ts
+// C Major Pentatonic Scale
+
+const BASE_FREQ = 261.63; // C4
+const PENTATONIC_RATIOS = [
+  1,       // C
+  9 / 8,   // D
+  5 / 4,   // E
+  3 / 2,   // G
+  5 / 3,   // A
+];
 
 const generateFrequencies = (): number[] => {
   const freqs: number[] = [];
