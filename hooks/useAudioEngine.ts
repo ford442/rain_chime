@@ -5,21 +5,25 @@ export const useAudioEngine = () => {
   const audioCtxRef = useRef<AudioContext | null>(null);
   const [isAudioReady, setIsAudioReady] = useState(false);
 
-  const initializeAudio = useCallback(() => {
-    if (typeof window !== 'undefined' && !audioCtxRef.current) {
+  const initializeAudio = useCallback(async () => {
+    if (typeof window !== 'undefined') {
       try {
-        const context = new (window.AudioContext || (window as any).webkitAudioContext)();
-        audioCtxRef.current = context;
+        if (!audioCtxRef.current) {
+          const context = new (window.AudioContext || (window as any).webkitAudioContext)();
+          audioCtxRef.current = context;
+        }
+
+        const context = audioCtxRef.current;
         
         // If the context is suspended, it must be resumed by a user gesture.
-        if (context.state === 'suspended') {
-          context.resume();
+        if (context && context.state === 'suspended') {
+          await context.resume();
         }
 
         setIsAudioReady(true);
         return true;
       } catch (e) {
-        console.error("Web Audio API is not supported in this browser", e);
+        console.error("Audio initialization failed", e);
         setIsAudioReady(false);
         return false;
       }
@@ -35,9 +39,11 @@ export const useAudioEngine = () => {
     }
     
     if (audioCtx.state === 'suspended') {
+        console.log("Resuming suspended context in playNote");
         audioCtx.resume();
     }
 
+    console.log("Playing note:", frequency);
     const oscillator = audioCtx.createOscillator();
     const gainNode = audioCtx.createGain();
 

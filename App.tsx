@@ -13,6 +13,7 @@ const App: React.FC = () => {
   const { isAudioReady, initializeAudio, playNote } = useAudioEngine();
 
   const handleChimeStrike = useCallback((chime: ChimeData, randomizePosition: boolean = false) => {
+    console.log("[App] handleChimeStrike", chime.id);
     if (!isAudioReady) return;
     
     playNote(chime.frequency);
@@ -31,6 +32,25 @@ const App: React.FC = () => {
       setHits(currentHits => currentHits.filter(h => h.key !== newHit.key));
     }, 2000); // Extended animation duration for blur effect
   }, [isAudioReady, playNote]);
+
+  // Rain Effect
+  useEffect(() => {
+    if (!isRaining || !isAudioReady) return;
+
+    const spawnRainDrop = () => {
+      const randomChime = CHIMES_CONFIG[Math.floor(Math.random() * CHIMES_CONFIG.length)];
+      handleChimeStrike(randomChime, true);
+    };
+
+    // Calculate interval based on density (1-10)
+    // Density 1: Slower (e.g., 2000ms)
+    // Density 10: Faster (e.g., 200ms)
+    const intervalTime = 2200 - (rainDensity * 200);
+
+    const intervalId = setInterval(spawnRainDrop, Math.max(200, intervalTime));
+
+    return () => clearInterval(intervalId);
+  }, [isRaining, rainDensity, isAudioReady, handleChimeStrike]);
 
   const handleManualClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!isAudioReady) {
@@ -107,7 +127,11 @@ const App: React.FC = () => {
           {!isAudioReady && (
             <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center backdrop-blur-sm transition-opacity duration-300">
               <button
-                onClick={initializeAudio}
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  initializeAudio();
+                }}
                 className="px-8 py-4 bg-cyan-500 text-slate-900 font-bold rounded-lg text-xl hover:bg-cyan-400 transition-colors duration-300 shadow-lg shadow-cyan-500/20"
                 aria-label="Start audio engine"
               >
