@@ -8,7 +8,7 @@ import { CHIMES_CONFIG } from './constants.ts';
 
 const App: React.FC = () => {
   const [isRaining, setIsRaining] = useState(false);
-  const [rainDensity, setRainDensity] = 3;
+  const [rainDensity, setRainDensity] = useState(3);
   const [hits, setHits] = useState<Hit[]>([]);
   const { isAudioReady, initializeAudio, playNote } = useAudioEngine();
 
