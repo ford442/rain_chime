@@ -107,7 +107,11 @@ const App: React.FC = () => {
           {!isAudioReady && (
             <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center backdrop-blur-sm transition-opacity duration-300">
               <button
-                onClick={initializeAudio}
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  initializeAudio();
+                }}
                 className="px-8 py-4 bg-cyan-500 text-slate-900 font-bold rounded-lg text-xl hover:bg-cyan-400 transition-colors duration-300 shadow-lg shadow-cyan-500/20"
                 aria-label="Start audio engine"
               >
