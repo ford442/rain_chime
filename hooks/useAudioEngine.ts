@@ -39,9 +39,11 @@ export const useAudioEngine = () => {
     }
     
     if (audioCtx.state === 'suspended') {
+        console.log("Resuming suspended context in playNote");
         audioCtx.resume();
     }
 
+    console.log("Playing note:", frequency);
     const oscillator = audioCtx.createOscillator();
     const gainNode = audioCtx.createGain();
 

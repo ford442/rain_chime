@@ -13,6 +13,7 @@ const App: React.FC = () => {
   const { isAudioReady, initializeAudio, playNote } = useAudioEngine();
 
   const handleChimeStrike = useCallback((chime: ChimeData, randomizePosition: boolean = false) => {
+    console.log("[App] handleChimeStrike", chime.id);
     if (!isAudioReady) return;
     
     playNote(chime.frequency);
@@ -31,6 +32,25 @@ const App: React.FC = () => {
       setHits(currentHits => currentHits.filter(h => h.key !== newHit.key));
     }, 2000); // Extended animation duration for blur effect
   }, [isAudioReady, playNote]);
+
+  // Rain Effect
+  useEffect(() => {
+    if (!isRaining || !isAudioReady) return;
+
+    const spawnRainDrop = () => {
+      const randomChime = CHIMES_CONFIG[Math.floor(Math.random() * CHIMES_CONFIG.length)];
+      handleChimeStrike(randomChime, true);
+    };
+
+    // Calculate interval based on density (1-10)
+    // Density 1: Slower (e.g., 2000ms)
+    // Density 10: Faster (e.g., 200ms)
+    const intervalTime = 2200 - (rainDensity * 200);
+
+    const intervalId = setInterval(spawnRainDrop, Math.max(200, intervalTime));
+
+    return () => clearInterval(intervalId);
+  }, [isRaining, rainDensity, isAudioReady, handleChimeStrike]);
 
   const handleManualClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!isAudioReady) {
