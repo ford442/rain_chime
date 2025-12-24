@@ -69,7 +69,7 @@ const App: React.FC = () => {
         playsInline // Important for iOS video playback
         className="absolute top-0 left-0 w-full h-full object-cover -z-10"
       >
-        <source src="https://stream.media.thinknpm.com/p/static/fastly/production/a9775.mp4" type="video/mp4" />
+        <source src="https://img.noahcohn.com/video/rainpiano.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       
