@@ -1,14 +1,9 @@
+// src/constants.ts
 
-import type { ChimeData } from './types.ts';
-
-// C Major Pentatonic Scale
-const BASE_FREQ = 261.63; // C4
-const PENTATONIC_RATIOS = [
-  1,       // C
-  9 / 8,   // D
-  5 / 4,   // E
-  3 / 2,   // G
-  5 / 3,   // A
+export const CHIME_FREQUENCIES: readonly number[] = [
+  // ... (frequencies as before)
+  261.63, 293.66, 329.63, 392.0, 440.0, 523.25, 587.33, 659.25, 783.99, 880.0,
+  1046.5, 1174.66, 1318.51, 1567.98, 1760.0,
 ];
 
 const generateFrequencies = (): number[] => {
