@@ -1,12 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import RainChime from './components/RainChime';
-import PlayIcon from './components/icons/PlayIcon';
-import PauseIcon from './components/icons/PauseIcon';
-import { useAudioEngine } from './hooks/useAudioEngine';
-import type { ChimeData } from './types';
-import { CHIMES_CONFIG } from './constants';
-// No longer need this, as we're using an external video URL
-// import { IMAGE_BASE64 } from './media/ImageBase64'; 
+import RainChime from './components/RainChime.tsx';
+import PlayIcon from './components/icons/PlayIcon.tsx';
+import PauseIcon from './components/icons/PauseIcon.tsx';
+import { useAudioEngine } from './hooks/useAudioEngine.ts';
+import type { ChimeData, Hit } from './types.ts';
+import { CHIMES_CONFIG } from './constants.ts';
 
 const App: React.FC = () => {
   const [isRaining, setIsRaining] = useState(false);
@@ -14,16 +12,24 @@ const App: React.FC = () => {
   const [hits, setHits] = useState<Hit[]>([]);
   const { isAudioReady, initializeAudio, playNote } = useAudioEngine();
 
-  const handleChimeStrike = useCallback((chime: ChimeData) => {
+  const handleChimeStrike = useCallback((chime: ChimeData, randomizePosition: boolean = false) => {
     if (!isAudioReady) return;
     
     playNote(chime.frequency);
-    const newHit: Hit = { key: Date.now() + Math.random(), chime };
+    
+    // Add position randomization for rain strikes
+    const hitChime = randomizePosition ? {
+      ...chime,
+      x: chime.x + (Math.random() - 0.5) * 10, // +/- 5 percentage points variation
+      y: chime.y + (Math.random() - 0.5) * 10, // +/- 5 percentage points variation
+    } : chime;
+    
+    const newHit: Hit = { key: Date.now() + Math.random(), chime: hitChime };
     setHits(currentHits => [...currentHits, newHit]);
     
     setTimeout(() => {
       setHits(currentHits => currentHits.filter(h => h.key !== newHit.key));
-    }, 600); // Animation duration
+    }, 2000); // Extended animation duration for blur effect
   }, [isAudioReady, playNote]);
 
   const handleManualClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -79,12 +85,24 @@ const App: React.FC = () => {
         </header>
 
         <div
-          className="relative w-full max-w-4xl aspect-video overflow-hidden group cursor-pointer" // No border/shadow, as it's full-screen
+          className="relative w-full max-w-5xl aspect-video group cursor-pointer"
+          style={{
+            maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 70%)',
+            WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 70%)',
+          }}
           onClick={handleManualClick}
           role="application"
           aria-label="Interactive Rain Chime Video"
         >
-          {/* This container is now primarily for click/tap detection and animations */}
+          <video
+            src="https://img.noahcohn.com/video/rainpiano.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover object-center"
+            data-testid="background-video"
+          />
           
           {!isAudioReady && (
             <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center backdrop-blur-sm transition-opacity duration-300">
@@ -106,9 +124,8 @@ const App: React.FC = () => {
               style={{
                 top: `${chime.y}%`,
                 left: `${chime.x}%`,
-                background: `radial-gradient(circle, ${chime.color}33, transparent 70%)`,
-                boxShadow: `0 0 20px ${chime.color}`,
-              }}
+                '--chime-color': chime.color,
+              } as React.CSSProperties}
             />
           ))}
         </div>
