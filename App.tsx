@@ -114,7 +114,7 @@ const App: React.FC = () => {
         <div
           className={`relative transition-all duration-1000 ease-in-out group/container cursor-pointer ${
             isRaining
-              ? 'fixed inset-0 w-screen h-screen z-50 rounded-none'
+              ? 'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 landscape:h-[90vh] landscape:w-auto portrait:w-[90vw] portrait:h-auto aspect-video rounded-xl shadow-2xl'
               : 'w-full max-w-5xl aspect-video rounded-xl shadow-2xl'
           }`}
           style={{
