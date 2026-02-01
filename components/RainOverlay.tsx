@@ -18,23 +18,32 @@ const RainOverlay: React.FC<RainOverlayProps> = ({ density }) => {
 
         // Re-initialize drops when density changes or resize happens
         const initDrops = () => {
-             canvas.width = window.innerWidth;
-             canvas.height = window.innerHeight;
+             // Use clientWidth/Height to match container size
+             const width = canvas.clientWidth;
+             const height = canvas.clientHeight;
+
+             canvas.width = width;
+             canvas.height = height;
 
              // Density 1 = 50 drops, Density 10 = ~300 drops
              const count = 50 + (density * 25);
              drops = [];
              for(let i=0; i<count; i++) {
                  drops.push({
-                     x: Math.random() * canvas.width,
-                     y: Math.random() * canvas.height,
+                     x: Math.random() * width,
+                     y: Math.random() * height,
                      length: Math.random() * 15 + 10,
                      speed: Math.random() * 10 + 15 + (density)
                  });
              }
         };
 
-        window.addEventListener('resize', initDrops);
+        const resizeObserver = new ResizeObserver(() => {
+            initDrops();
+        });
+        resizeObserver.observe(canvas);
+
+        // Also call init immediately
         initDrops();
 
         const draw = () => {
@@ -67,7 +76,7 @@ const RainOverlay: React.FC<RainOverlayProps> = ({ density }) => {
         draw();
 
         return () => {
-            window.removeEventListener('resize', initDrops);
+            resizeObserver.disconnect();
             cancelAnimationFrame(animationFrameId);
         };
     }, [density]);
